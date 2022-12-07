@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, TextInput,StyleSheet, ImageBackground, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, Button, TextInput,StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
 
 const backgroundColors = {
   black: '#090C08',
@@ -141,15 +141,6 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
 
-  icon: {
-    padding: 10,
-    margin: 5,
-    height: 20,
-    width: 20,
-    resizeMode: 'stretch',
-    alignItems: 'center',
-  },
-
   input: {
     fontSize: 16,
     fontWeight: '300',
@@ -158,7 +149,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0)',
     borderWidth: 2,
     borderRadius: 5,
-    //elevation: 2,
     position: 'absolute',
     left: -2,
     paddingLeft: 35,
@@ -203,5 +193,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+
+  icon: {
+    padding: 10,
+    margin: 5,
+    height: 20,
+    width: 20,
+    resizeMode: 'stretch',
+    alignItems: 'center',
   },
 });
