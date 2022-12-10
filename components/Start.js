@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, TextInput,StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
 const backgroundColors = {
   black: '#090C08',
