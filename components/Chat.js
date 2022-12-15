@@ -1,11 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, Platform, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Platform, KeyboardAvoidingView, Button } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import firebase from "firebase";
 require('firebase/firestore');
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from '@react-native-community/netinfo';
+
+
+
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import CustomActions from "./CustomActions";
+import MapView from "react-native-maps";
 
 export default class Chat extends React.Component {
   constructor() {
@@ -19,6 +26,8 @@ export default class Chat extends React.Component {
         name: '',
       },
       isConnected: false,
+      image: null,
+      location: null
     };
 
     if (!firebase.apps.length) {
@@ -74,11 +83,13 @@ export default class Chat extends React.Component {
         user: {
           _id: user.uid,
           name: name,
+          avatar: 'https://placeimg.com/140/140/any',
         },
     });
     this.unsubscribe = this.referenceChatMessages
     .orderBy('createdAt', 'desc')
     .onSnapshot(this.onCollectionUpdate);
+    this.saveMessages();
 });
   }
 
@@ -126,6 +137,8 @@ export default class Chat extends React.Component {
       text: message.text || '',
       createdAt: message.createdAt,
       user: message.user,
+      image: message.image || null,
+      location: message.location || null,
     });
   };
     //bubble styling
@@ -154,6 +167,31 @@ export default class Chat extends React.Component {
         );
       }
     }
+
+
+    renderCustomActions = (props) => {
+      return <CustomActions {...props} />;
+  };
+   //Returns MapView if message contains location data
+   renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+        return (
+            <MapView
+                style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+                region={{
+                    latitude: currentMessage.location.latitude,
+                    longitude: currentMessage.location.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}
+            />
+        );
+    }
+    return null;
+  }
+
+
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
     // go through each document
@@ -169,6 +207,8 @@ export default class Chat extends React.Component {
           name: data.user.name,
           avatar: data.user.avatar || '',
         },
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
@@ -186,14 +226,20 @@ export default class Chat extends React.Component {
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
+
+          isConnected={this.state.isConnected}
+
           renderInputToolbar={this.renderInputToolbar.bind(this)}
           onSend={(messages) => this.onSend(messages)}
           user={{
             _id: this.state.user._id,
            
-            avatar: 'https://placeimg.com/130/130/any',
+            avatar: this.state.user.avatar,
           }}
+          renderActions={this.renderCustomActions}
+          renderCustomView={this.renderCustomView}
         />
+
         {Platform.OS === "android" ? (
           <KeyboardAvoidingView behavior="height" />
         ) : null}
