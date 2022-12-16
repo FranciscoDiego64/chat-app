@@ -1,24 +1,20 @@
 
 import PropTypes from 'prop-types';
-
 import React from 'react';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
-
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
-
 import firebase from "firebase";
 require('firebase/firestore');
 
 export default class CustomActions extends React.Component {
   
-     //Let the user pick an image from the device's image library
+     //Pick an image from image library
     
     imagePicker = async () => {
-      // expo permission
+
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       try {
         if (status === "granted") {
@@ -37,8 +33,7 @@ export default class CustomActions extends React.Component {
       }
     };
   
-    
-    //  Let the user take a photo with device's camera
+    //  Access device's camera to take a picture
    
     takePhoto = async () => {
       const { status } = await Permissions.askAsync(
@@ -61,8 +56,7 @@ export default class CustomActions extends React.Component {
       }
     };
   
-   
-     // get the location of the user by using GPS
+     // Get user location
     
     getLocation = async () => {
       try {
@@ -116,7 +110,7 @@ export default class CustomActions extends React.Component {
       return await snapshot.ref.getDownloadURL();
     };
   
-    // function that handles communication features
+    // Communication features
    
     onActionPress = () => {
       const options = [
@@ -147,7 +141,6 @@ export default class CustomActions extends React.Component {
       );
     };
   
-    //render function
     render() {
       return (
         <TouchableOpacity

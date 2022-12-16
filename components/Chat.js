@@ -3,12 +3,8 @@ import { StyleSheet, View, Platform, KeyboardAvoidingView, Button } from 'react-
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import firebase from "firebase";
 require('firebase/firestore');
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from '@react-native-community/netinfo';
-
-
-
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import CustomActions from "./CustomActions";
@@ -45,7 +41,7 @@ export default class Chat extends React.Component {
     this.referenceChatMessages = firebase.firestore().collection('messages');
   }
 
-  //getMessages should be placed before componentdidmount
+  //getMessages before componentdidmount
   async getMessages() {
     let messages = '';
     try {
@@ -141,7 +137,7 @@ export default class Chat extends React.Component {
       location: message.location || null,
     });
   };
-    //bubble styling
+    //Bubble styling
     renderBubble(props) {
       return (
         <Bubble
@@ -172,6 +168,7 @@ export default class Chat extends React.Component {
     renderCustomActions = (props) => {
       return <CustomActions {...props} />;
   };
+
    //Returns MapView if message contains location data
    renderCustomView(props) {
     const { currentMessage } = props;
@@ -194,9 +191,9 @@ export default class Chat extends React.Component {
 
   onCollectionUpdate = (querySnapshot) => {
     const messages = [];
-    // go through each document
+    // Loop through each document
     querySnapshot.forEach((doc) => {
-      //get the QueryDocumentSnapshot's data
+      //Get the QueryDocumentSnapshot's data
       let data = doc.data();
       messages.push({
         _id: data._id,
